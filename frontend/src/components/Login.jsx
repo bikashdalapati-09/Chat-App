@@ -1,0 +1,62 @@
+import React, {useState} from "react";
+import { Link } from "react-router-dom";
+
+function Login() {
+  const [user, setUser] = useState({
+    username: "",
+    password: "",
+  });
+
+  const onSubmitHandler = (e) => {
+    e.preventDefault();
+    console.log(user);
+    setUser({
+      username: "",
+      password: "",
+    });
+  };
+  return (
+    <div className="min-w-96 m-auto">
+      <div className="w-full p-6 rounded-lg shadow-mdh-full w-full bg-green-400 rounded-md bg-clip-padding backdrop-filter backdrop-blur-sm bg-opacity-10 border border-gray-100">
+        <h1 className="text-3xl font-bold text-center text-white">Signup</h1>
+        <form onSubmit={onSubmitHandler} action="">
+          <div>
+            <label className="label p-2">
+              <span className="text-base label-text text-white">Username</span>
+            </label>
+            <input
+            value={user.username}
+            onChange={(e) => setUser({...user,username: e.target.value})}
+              className="w-full input input-bordered h-10"
+              type="text"
+              placeholder="username"
+            />
+          </div>
+
+          <div>
+            <label className="label p-2">
+              <span className="text-base label-text text-white">Password</span>
+            </label>
+            <input
+            value={user.password}
+            onChange={(e) => setUser({...user,password: e.target.value})}
+              className="w-full input input-bordered h-10"
+              type="password"
+              placeholder="password"
+            />
+          </div>
+
+          <p className="text-white text-center my-2">
+            Don't have an account ? <Link to={"/signup"}>signup</Link>
+          </p>
+
+          <button type="submit" className="btn btn-warning btn-block btn-sm mt-2 border border-slate-700">
+            Login
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+export default Login;
