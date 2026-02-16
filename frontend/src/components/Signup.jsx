@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import Login from "./Login";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 function Signup() {
   const [user, setUser] = useState({
@@ -11,9 +12,31 @@ function Signup() {
     gender: "",
   });
 
-  const onSubmitHandler = (e) => {
+  const navigate = useNavigate();
+
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
-    console.log(user);
+    try {
+      console.log("Sending user:", user);
+      const res = await axios.post(
+        "http://localhost:7000/api/v1/user/register",
+        user,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        },
+      );
+      console.log(res);
+      
+      if (res.data.success) {
+        navigate("/login");
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+    }
     setUser({
       username: "",
       fullname: "",
