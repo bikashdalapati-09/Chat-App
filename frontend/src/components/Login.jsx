@@ -1,16 +1,19 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from 'axios'
+import axios from "axios";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { setAuthUser } from "../redux/userSlice";
 
 function Login() {
   const [user, setUser] = useState({
     username: "",
     password: "",
   });
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  const onSubmitHandler =async (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
       console.log("Sending user:", user);
@@ -25,15 +28,20 @@ function Login() {
         },
       );
       console.log(res);
-      
+      dispatch(setAuthUser(res.data));
+
       if (res.data.success) {
         navigate("/");
         toast.success(res.data.message);
       }
     } catch (error) {
-      toast.error(error.response.data.message)
-      console.log(error);
+      const message =
+        error.response?.data?.message || "Login failed. Please try again.";
+
+      toast.error(message);
+      console.log(error.data);
     }
+
     setUser({
       username: "",
       password: "",
@@ -49,8 +57,8 @@ function Login() {
               <span className="text-base label-text text-white">Username</span>
             </label>
             <input
-            value={user.username}
-            onChange={(e) => setUser({...user,username: e.target.value})}
+              value={user.username}
+              onChange={(e) => setUser({ ...user, username: e.target.value })}
               className="w-full input input-bordered h-10"
               type="text"
               placeholder="username"
@@ -62,8 +70,8 @@ function Login() {
               <span className="text-base label-text text-white">Password</span>
             </label>
             <input
-            value={user.password}
-            onChange={(e) => setUser({...user,password: e.target.value})}
+              value={user.password}
+              onChange={(e) => setUser({ ...user, password: e.target.value })}
               className="w-full input input-bordered h-10"
               type="password"
               placeholder="password"
@@ -74,7 +82,10 @@ function Login() {
             Don't have an account ? <Link to={"/signup"}>signup</Link>
           </p>
 
-          <button type="submit" className="btn btn-warning btn-block btn-sm mt-2 border border-slate-700">
+          <button
+            type="submit"
+            className="btn btn-warning btn-block btn-sm mt-2 border border-slate-700"
+          >
             Login
           </button>
         </form>
