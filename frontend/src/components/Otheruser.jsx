@@ -1,14 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { setSelectedUser } from "../redux/userSlice";
+function Otheruser(props) {
+  const user = props.user;
 
-function Otheruser() {
+  const dispatch = useDispatch();
+
+  const selectedUserHandler = (user) =>{
+    dispatch(setSelectedUser(user))
+  }
   return (
     <div>
-      <div className="flex gap-3 items-center hover:bg-white/10 rounded p-2 py-3 cursor-pointer transition-all duration-200 group">
+      <div onClick={() => selectedUserHandler(user)} className="flex gap-3 items-center hover:bg-white/10 rounded p-2 py-3 cursor-pointer transition-all duration-200 group">
         {/* Avatar Section */}
         <div className="avatar online">
           <div className="w-12 rounded-full">
             <img
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              src={user?.profilePhoto}
               alt="user-profile"
             />
           </div>
@@ -18,7 +26,7 @@ function Otheruser() {
         <div className="flex flex-col flex-1">
           <div className="flex justify-between items-center">
             <p className="font-bold text-slate-100 group-hover:text-white transition-colors">
-              Bikash Dalapati
+              {user?.fullname}
             </p>
             {/* Added a subtle status or time icon for extra beauty */}
             <span className="text-xs text-slate-400">12:45 PM</span>
