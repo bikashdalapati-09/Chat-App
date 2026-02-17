@@ -1,9 +1,13 @@
 import axios from "axios";
 import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { setMessages } from "../redux/messageSlice";
 
 const useGetMessages = () => {
   const { selectedUser } = useSelector((store) => store.user);
+  if (!selectedUser?._id) return;
+
+  const dispatch = useDispatch();
  useEffect(() => {
   if (!selectedUser?._id) return;
 
@@ -13,7 +17,8 @@ const useGetMessages = () => {
       const res = await axios.get(
         `http://localhost:7000/api/v1/message/get/${selectedUser._id}`
       );
-      console.log(res);
+      dispatch(setMessages(res.data?.messages || []))
+      // console.log(res.data);
     } catch (error) {
       console.log(error);
     }

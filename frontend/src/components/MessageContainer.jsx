@@ -1,8 +1,14 @@
 import React from "react";
 import SendMessageBox from "./SendMessageBox";
 import Messages from "./Messages";
+import { useSelector } from "react-redux";
 
 function MessageContainer() {
+  const {selectedUser} = useSelector(store => store.user)
+  
+  if(!selectedUser){
+    return;
+  }
   return (
     <div className="md:min-w-[450px] flex flex-col h-full">
       {/* MATCHING HEADER */}
@@ -11,7 +17,7 @@ function MessageContainer() {
         <div className="avatar online">
           <div className="w-10 rounded-full">
             <img
-              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+              src={selectedUser.profilePhoto}
               alt="user-profile"
             />
           </div>
@@ -19,7 +25,7 @@ function MessageContainer() {
 
         {/* User Info Section */}
         <div className="flex flex-col flex-1">
-          <p className="font-bold text-slate-100">Bikash Dalapati</p>
+          <p className="font-bold text-slate-100">{selectedUser.fullname}</p>
           <p className="text-xs text-white">Online</p>
         </div>
       </div>

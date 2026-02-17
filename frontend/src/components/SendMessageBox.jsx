@@ -1,14 +1,37 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { IoSend } from "react-icons/io5";
+import axios from 'axios'
+import {useDispatch, useSelector} from 'react-redux'
+import { setMessages } from '../redux/messageSlice';
 
 function SendMessageBox() {
+    const [message, setMessage] = useState("");
+    const dispatch = useDispatch()
+    const {selectedUser} = useSelector(store => store.user)
+    const {messages} = useSelector(store => store.message)
+    const onSubmitHandler =async (e) => {
+        e.preventDefault()
+        try {
+
+            const res = await axios.post(`http://localhost:7000/api/v1/message/send/${selectedUser?._id}`, {message}, {
+                withCredentials: true
+            })
+            dispatch(setMessages([...messages, res?.data?.message]))
+            
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
   return (
     <div className='px-4 my-3'>
-        <form className='relative flex items-center'>
+        <form onSubmit={onSubmitHandler} className='relative flex items-center'>
             <input 
                 type='text' 
                 className='w-full p-3 pr-12 text-sm rounded-full bg-white/10 border border-white/20 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-green-500/50 transition-all'
                 placeholder='Type a message...'
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
             />
             <button 
                 type='submit' 

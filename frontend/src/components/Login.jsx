@@ -27,7 +27,7 @@ function Login() {
           withCredentials: true,
         },
       );
-      console.log(res);
+      console.log(res.data);
       dispatch(setAuthUser(res.data));
 
       if (res.data.success) {

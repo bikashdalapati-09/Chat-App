@@ -1,29 +1,45 @@
-import React from "react";
+import React, { useEffect, useRef } from "react";
+import { useSelector } from "react-redux";
 
-function Message() {
+function Message({ message }) {
+  const { authUser, selectedUser } = useSelector((store) => store.user);
+  const scroll = useRef(null);
+
+  console.log(authUser);
+  console.log(message.senderId._id);
+  console.log(message.senderId);
+  
+  
+
+  useEffect(() => {
+    scroll.current?.scrollIntoView({ behavior: "smooth" });
+  }, [message]);
+
+
+const loggedInUserId = authUser?._id || authUser?.id;
+const senderId = message?.senderId?._id || message?.senderId;
+const isMe = String(senderId) === String(loggedInUserId);
+
   return (
-    <div className="p-2">
-      <div className="chat chat-start">
-        {/* Avatar Section */}
+    <div ref={scroll} className="p-2">
+      <div className={`chat ${isMe ? "chat-end" : "chat-start"}`}>
         <div className="chat-image avatar">
           <div className="w-10 rounded-full ring ring-white/10 shadow-xl">
             <img
               alt="User avatar"
-              src="https://img.daisyui.com/images/profile/demo/kenobee@192.webp"
+              src={isMe? authUser.profilePhoto : selectedUser.profilePhoto}
             />
           </div>
         </div>
-
-        {/* Message Header */}
         <div className="chat-header mb-1">
           <time className="text-[10px] text-slate-400 opacity-70">12:45 PM</time>
         </div>
-
-        {/* The Chat Bubble - Glass style */}
-        <div className="chat-bubble bg-white/10 backdrop-blur-md text-white border border-white/10 shadow-md">
-          You were the Chosen One!
+        {/* Dynamic bubble color: Green for 'Me', Glass for 'Other' */}
+        <div className={`chat-bubble backdrop-blur-md text-white border border-white/10 shadow-md ${
+          isMe ? "bg-green-700" : "bg-white/10"
+        }`}>
+          {message?.message}
         </div>
-
       </div>
     </div>
   );
