@@ -1,13 +1,19 @@
-import React from "react";
+import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 import { BiLogOut } from "react-icons/bi";
 import OtherUsers from "./OtherUsers";
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import {useNavigate} from 'react-router-dom'
+import { useDispatch, useSelector } from "react-redux";
+import { setOtherUsers } from "../redux/userSlice";
 
 function Sidebar() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const {otherUsers} = useSelector(store => store.user)
+  const dispatch = useDispatch();
+
   const logoutHandler = async () => {
     try {
       const res = await axios.get('http://localhost:7000/api/v1/user/logout')
@@ -18,11 +24,25 @@ function Sidebar() {
       
     }
   }
+
+  const searchSubmitHandler = (e) => {
+    e.preventDefault();
+    const conversationUser = otherUsers?.find((user) => user.fullname.toLowerCase().includes(search.toLowerCase()));
+
+    if(conversationUser){
+      dispatch(setOtherUsers([conversationUser]))
+    }else{
+      toast.error("User not found 🙃")
+    }
+  }
+
   return (
     <div className="border-r border-slate-500 p-4 flex flex-col h-full">
       {/* Search Bar - Fixed at top */}
-      <form className="flex items-center gap-2">
+      <form onSubmit={searchSubmitHandler} className="flex items-center gap-2">
         <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
           type="text"
           className="input input-bordered rounded-full bg-white/10 text-white placeholder-slate-400 w-full focus:outline-none focus:border-green-500 transition-all"
           placeholder="Search..."
