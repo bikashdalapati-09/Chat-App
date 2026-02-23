@@ -14,7 +14,7 @@ function Messages() {
   return (
     <div className="px-4 flex-1 overflow-auto">
       {
-        messages?.map((message, index) => {
+        messages && messages?.map((message, index) => {
           return(
             <Message key={index} message={message}/>
           )
