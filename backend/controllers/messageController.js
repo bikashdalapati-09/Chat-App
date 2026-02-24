@@ -55,7 +55,6 @@ export const getMessage = async (req, res) => {
       },
     });
 
-    console.log(conversation);
     return res.status(200).json({
       messages: conversation?.messages || [],
     });

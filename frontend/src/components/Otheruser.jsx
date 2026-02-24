@@ -1,8 +1,10 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedUser } from "../redux/userSlice";
 function Otheruser(props) {
   const user = props.user;
+  const {onlineUsers} = useSelector(store => store.user);
+  const isOnline = onlineUsers.includes(user._id);
 
   const dispatch = useDispatch();
 
@@ -13,7 +15,7 @@ function Otheruser(props) {
     <div>
       <div onClick={() => selectedUserHandler(user)} className="flex gap-3 items-center hover:bg-white/10 rounded p-2 py-3 cursor-pointer transition-all duration-200 group">
         {/* Avatar Section */}
-        <div className="avatar online">
+        <div className={`avatar ${isOnline ? "online" : "offline"}`}>
           <div className="w-12 rounded-full">
             <img
               src={user?.profilePhoto}

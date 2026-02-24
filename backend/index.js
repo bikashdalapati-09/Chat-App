@@ -5,10 +5,11 @@ import userRoute from "./routes/userRoute.js"
 import messageRouter from "./routes/messageRoute.js"
 import cookieParser from "cookie-parser"
 import cors from 'cors'
+import { app, server } from "./socket/socket.js";
 
 dotenv.config({})
 
-const app = express()
+// const app = express()
 const PORT = process.env.PORT || 8000
 
 app.use(express.json())
@@ -25,6 +26,6 @@ connectDB()
 app.use("/api/v1/user", userRoute)
 app.use("/api/v1/message", messageRouter)
 
-app.listen(PORT, ()=>{
+server.listen(PORT, ()=>{
     console.log (`Server is running on ${PORT}`)
 })

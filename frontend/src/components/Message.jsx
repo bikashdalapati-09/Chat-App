@@ -5,12 +5,6 @@ function Message({ message }) {
   const { authUser, selectedUser } = useSelector((store) => store.user);
   const scroll = useRef(null);
 
-  console.log(authUser);
-  console.log(message.senderId._id);
-  console.log(message.senderId);
-  
-  
-
   useEffect(() => {
     scroll.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
