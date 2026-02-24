@@ -17,6 +17,7 @@ function SendMessageBox() {
                 withCredentials: true
             })
             dispatch(setMessages([...messages, res?.data?.message]))
+            setMessage("");
             
         } catch (error) {
             console.log(error);
